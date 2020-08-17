@@ -11,5 +11,19 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+mix
+    .scripts([
+        'resources/js/core/jquery.min.js',
+        'resources/js/core/popper.min.js',
+        'resources/js/core/bootstrap.min.js',
+        'resources/js/plugins/perfect-scrollbar.jquery.min.js',
+        'resources/js/now-ui-dashboard.min.js'
+    ], 'public/js/app.js')
+    .version();
+
+mix
+    .styles([
+    'resources/css/bootstrap.min.css',
+    'resources/css/now-ui-dashboard.min.css'
+], 'public/css/app.css')
+    .version();
