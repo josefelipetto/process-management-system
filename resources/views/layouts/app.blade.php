@@ -110,6 +110,7 @@
                 </ul>
             </div>
         </div>
+        @yield('content')
     </div>
     </body>
 
