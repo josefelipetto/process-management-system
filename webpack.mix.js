@@ -16,6 +16,7 @@ mix
         'resources/js/core/jquery.min.js',
         'resources/js/core/popper.min.js',
         'resources/js/core/bootstrap.min.js',
+        'resources/js/plugins/chartjs.min.js',
         'resources/js/plugins/perfect-scrollbar.jquery.min.js',
         'resources/js/now-ui-dashboard.min.js'
     ], 'public/js/app.js')
@@ -23,7 +24,7 @@ mix
 
 mix
     .styles([
-    'resources/css/bootstrap.min.css',
-    'resources/css/now-ui-dashboard.min.css'
+        'resources/css/bootstrap.min.css',
+        'resources/css/now-ui-dashboard.min.css'
 ], 'public/css/app.css')
     .version();
