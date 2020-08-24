@@ -28,3 +28,6 @@ mix
         'resources/css/now-ui-dashboard.min.css'
 ], 'public/css/app.css')
     .version();
+
+mix
+    .copyDirectory('resources/fonts', 'public/fonts');

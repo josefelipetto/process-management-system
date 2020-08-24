@@ -3,18 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Projects;
+use App\Services\ProjetcsService;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
 {
+    private ProjetcsService $projectsService;
+
+    /**
+     * ProjectsController constructor.
+     * @param ProjetcsService $projectsService
+     */
+    public function __construct(ProjetcsService $projectsService)
+    {
+        $this->projectsService = $projectsService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        //
+        $projects = $this->projectsService->all();
+        return view('projects.index', compact('projects'));
     }
 
     /**

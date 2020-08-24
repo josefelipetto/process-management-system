@@ -26,17 +26,23 @@ class SidebarItem extends Component
     public $name;
 
     /**
+     * @var
+     */
+    public $url;
+
+    /**
      * Create a new component instance.
      *
      * @param $active
      * @param $icon
      * @param $name
      */
-    public function __construct($active, $icon, $name)
+    public function __construct($active, $icon, $name, $url)
     {
         $this->active = $active;
         $this->icon = $icon;
         $this->name = $name;
+        $this->url = $url;
     }
 
     /**
