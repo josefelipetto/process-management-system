@@ -631,6 +631,10 @@ fieldset[disabled] .btn-primary.active {
   color: #FFFFFF;
 }
 
+a .btn-success {
+    color: #ffffff;
+}
+
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:not(:disabled):not(.disabled):active,

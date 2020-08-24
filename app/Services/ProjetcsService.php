@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Project;
 use App\Repositories\ProjectsRepository;
+use Illuminate\Database\Eloquent\Model;
 
 class ProjetcsService implements ServiceInterface
 {
@@ -16,5 +18,15 @@ class ProjetcsService implements ServiceInterface
     public function all()
     {
         return $this->projectsRepository->all();
+    }
+
+    public function create(array $data)
+    {
+        return $this->projectsRepository->create($data);
+    }
+
+    public function update(Model $resource, array $data)
+    {
+        $this->projectsRepository->update($resource, $data);
     }
 }

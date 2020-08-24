@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Projects;
+use App\Project;
 use App\Services\ProjetcsService;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ProjectsController extends Controller
 {
@@ -23,7 +30,7 @@ class ProjectsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -34,31 +41,44 @@ class ProjectsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
-        //
+        return view('projects.form');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code' => 'required',
+            'name' => 'required'
+        ]);
+
+        $data = $request->except([
+            '_token'
+        ]);
+
+        $data['user_id'] = Auth::id();
+
+        $this->projectsService->create($data);
+
+        return redirect()->back()->with('success', 'Projeto criado com sucesso');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Projects  $projects
-     * @return \Illuminate\Http\Response
+     * @param Project $projects
+     * @return Response
      */
-    public function show(Projects $projects)
+    public function show(Project $projects)
     {
         //
     }
@@ -66,34 +86,46 @@ class ProjectsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Projects  $projects
-     * @return \Illuminate\Http\Response
+     * @param Project $project
+     * @return Application|Factory|View
      */
-    public function edit(Projects $projects)
+    public function edit(Project $project)
     {
-        //
+        return view('projects.form', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Projects  $projects
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Project $project
+     * @return RedirectResponse
      */
-    public function update(Request $request, Projects $projects)
+    public function update(Request $request, Project $project)
     {
-        //
+        $request->validate([
+            'code' => 'required',
+            'name' => 'required'
+        ]);
+
+        $this->projectsService->update($project, $request->except([
+            '_token'
+        ]));
+
+        return redirect()->back()->with('success', 'Projeto editado com sucesso');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Projects  $projects
-     * @return \Illuminate\Http\Response
+     * @param Project $project
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Projects $projects)
+    public function destroy(Project $project)
     {
-        //
+        $deleted = $project->delete();
+
+        return redirect()->back()->with('success', 'Projeto deletado com sucesso');
     }
 }
