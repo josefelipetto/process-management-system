@@ -18,14 +18,15 @@ mix
         'resources/js/core/bootstrap.min.js',
         'resources/js/plugins/chartjs.min.js',
         'resources/js/plugins/perfect-scrollbar.jquery.min.js',
-        'resources/js/now-ui-dashboard.min.js'
+        'resources/js/now-ui-dashboard.js',
+        'resources/js/utils.js',
     ], 'public/js/app.js')
     .version();
 
 mix
     .styles([
         'resources/css/bootstrap.min.css',
-        'resources/css/now-ui-dashboard.min.css'
+        'resources/css/now-ui-dashboard.css'
 ], 'public/css/app.css')
     .version();
 
