@@ -60,12 +60,16 @@
                                             </span>
                                             Editar
                                         </button>
-                                        <button class="btn btn-danger" onclick="redirectTo('{{ route('projects.destroy', ['project' => $project->id]) }}')">
-                                            <span class="btn-label">
-                                                <i class="now-ui-icons ui-1_simple-remove"></i>
-                                            </span>
-                                            Deletar
-                                        </button>
+                                        <form method="post" action="{{ route('projects.destroy', ['project' => $project->id]) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-danger" type="submit">
+                                                <span class="btn-label">
+                                                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                </span>
+                                                Deletar
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

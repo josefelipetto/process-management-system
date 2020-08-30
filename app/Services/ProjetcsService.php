@@ -29,4 +29,9 @@ class ProjetcsService implements ServiceInterface
     {
         $this->projectsRepository->update($resource, $data);
     }
+
+    public function delete(Model $model)
+    {
+        $this->projectsRepository->delete($model);
+    }
 }

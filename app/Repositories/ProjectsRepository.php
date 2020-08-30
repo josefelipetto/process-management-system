@@ -24,4 +24,9 @@ class ProjectsRepository implements RepositoryInterface
             ->update($data);
     }
 
+    public function delete(Model $resource)
+    {
+        return $resource->delete();
+    }
+
 }

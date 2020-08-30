@@ -124,8 +124,7 @@ class ProjectsController extends Controller
      */
     public function destroy(Project $project)
     {
-        $deleted = $project->delete();
-
+        $this->projectsService->delete($project);
         return redirect()->back()->with('success', 'Projeto deletado com sucesso');
     }
 }
