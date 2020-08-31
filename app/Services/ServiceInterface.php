@@ -13,4 +13,6 @@ interface ServiceInterface
     public function create(array $data);
 
     public function update(Model $resource, array $data);
+
+    public function delete(Model $model);
 }
