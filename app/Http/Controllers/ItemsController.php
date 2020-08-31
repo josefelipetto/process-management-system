@@ -2,84 +2,116 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ItemRequest;
 use App\Item;
+use App\Project;
+use App\Services\ItemsService;
+use App\Status;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class ItemsController extends Controller
 {
+
+    private ItemsService $itemsService;
+
+    /**
+     * ItemsController constructor.
+     * @param ItemsService $itemsService
+     */
+    public function __construct(ItemsService $itemsService)
+    {
+        $this->itemsService = $itemsService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function index()
     {
-        //
+        $items = $this->itemsService->all();
+        return view('items.index', compact('items'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
-        //
+        $statuses = Status::all();
+        $projects = Project::all();
+        return view('items.form', compact('statuses', 'projects'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ItemRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ItemRequest $request)
     {
-        //
+        $this->itemsService->create($request->validated());
+        return redirect()->back()->with('success', 'Item criado com sucesso');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Item  $items
-     * @return \Illuminate\Http\Response
+     * @param Item $item
+     * @return Application|Factory|Response|View
      */
-    public function show(Item $items)
+    public function show(Item $item)
     {
-        //
+        $statuses = Status::all();
+        $projects = Project::all();
+        return view('items.form', compact('statuses', 'projects', 'item'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Item  $items
-     * @return \Illuminate\Http\Response
+     * @param Item $item
+     * @return Application|Factory|Response|View
      */
-    public function edit(Item $items)
+    public function edit(Item $item)
     {
-        //
+        $statuses = Status::all();
+        $projects = Project::all();
+        return view('items.form', compact('item', 'statuses', 'projects'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Item  $items
-     * @return \Illuminate\Http\Response
+     * @param ItemRequest $request
+     * @param Item $item
+     * @return RedirectResponse
      */
-    public function update(Request $request, Item $items)
+    public function update(ItemRequest $request, Item $item)
     {
-        //
+        $this->itemsService->update($item, $request->validated());
+        return redirect()->back()->with('success', 'Item atualizado com sucesso');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Item  $items
-     * @return \Illuminate\Http\Response
+     * @param Item $item
+     * @return RedirectResponse
      */
-    public function destroy(Item $items)
+    public function destroy(Item $item)
     {
-        //
+        $this->itemsService->delete($item);
+        return redirect()->back()->with('success', 'Item deletado com sucesso');
     }
 }

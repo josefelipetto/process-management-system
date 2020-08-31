@@ -5,10 +5,10 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Projetos</h4>
+                    <h4 class="card-title">Items</h4>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-success" onclick="redirectTo('{{ route('projects.create') }}')">
+                    <button class="btn btn-success" onclick="redirectTo('{{ route('items.create') }}')">
                         <span class="btn-label">
                             <i class="now-ui-icons ui-1_simple-add"></i>
                         </span>
@@ -42,34 +42,34 @@
                             <thead class="text-primary">
                             <tr>
                                 <th>Código</th>
-                                <th>Nome</th>
-                                <th>Responsável</th>
+                                <th>Descrição</th>
+                                <th>Projeto</th>
                                 <th>Ações</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($projects as $project)
+                            @foreach($items as $item)
                                 <tr>
-                                    <td>{{ $project->code }}</td>
-                                    <td>{{ $project->name }}</td>
-                                    <td>{{ $project->user->name }}</td>
+                                    <td>{{ $item->code }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td>{{ $item->project->name }}</td>
                                     <td>
                                         <div class="row">
-                                            <button
-                                                class="btn btn-warning"
-                                                onclick="redirectTo('{{ route('projects.edit', ['project' => $project->id]) }}')"
-                                            >
+                                            <button class="btn btn-warning" onclick="redirectTo('{{ route('items.edit', ['item' => $item->id]) }}')">
                                                 <span class="btn-label">
                                                     <i class="now-ui-icons design-2_ruler-pencil"></i>
                                                 </span>
                                             </button>
-                                            <form method="post" action="{{ route('projects.destroy', ['project' => $project->id]) }}">
+                                            <form
+                                                method="post"
+                                                action="{{ route('items.destroy', ['item' => $item->id]) }}"
+                                            >
                                                 @method('DELETE')
                                                 @csrf
                                                 <button class="btn btn-danger" type="submit">
-                                                    <span class="btn-label">
-                                                        <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                    </span>
+                                                <span class="btn-label">
+                                                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                </span>
                                                 </button>
                                             </form>
                                         </div>
