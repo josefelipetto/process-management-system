@@ -13,8 +13,15 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class ProjectsController
+ * @package App\Http\Controllers
+ */
 class ProjectsController extends Controller
 {
+    /**
+     * @var ProjetcsService
+     */
     private ProjetcsService $projectsService;
 
     /**

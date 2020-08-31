@@ -14,9 +14,16 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * Class ItemsController
+ * @package App\Http\Controllers
+ */
 class ItemsController extends Controller
 {
 
+    /**
+     * @var ItemsService
+     */
     private ItemsService $itemsService;
 
     /**

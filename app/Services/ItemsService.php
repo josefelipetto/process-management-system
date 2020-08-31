@@ -51,6 +51,11 @@ class ItemsService implements ServiceInterface
         return $this->itemsRepository->update($resource, $data);
     }
 
+    /**
+     * @param Model $model
+     * @return bool|null
+     * @throws \Exception
+     */
     public function delete(Model $model)
     {
         return $this->itemsRepository->delete($model);
