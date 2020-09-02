@@ -27,8 +27,13 @@ mix
     .styles([
         'resources/css/bootstrap.min.css',
         'resources/css/now-ui-dashboard.css'
-], 'public/css/app.css')
+    ], 'public/css/app.css')
     .version();
 
 mix
-    .copyDirectory('resources/fonts', 'public/fonts');
+    .styles([
+        'resources/css/flowchart.css'
+    ], 'public/css/flowchart.css')
+    .version();
+
+mix.copyDirectory('resources/fonts', 'public/fonts');

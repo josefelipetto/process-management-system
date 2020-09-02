@@ -115,10 +115,22 @@ class ItemsController extends Controller
      *
      * @param Item $item
      * @return RedirectResponse
+     * @throws \Exception
      */
     public function destroy(Item $item)
     {
         $this->itemsService->delete($item);
         return redirect()->back()->with('success', 'Item deletado com sucesso');
+    }
+
+    /**
+     * View Item's workflow
+     * @param Item $item
+     * @return Application|Factory|View
+     */
+    public function viewWorkflow(Item $item)
+    {
+        $hidePanelHeader = true;
+        return view('workflow.index', compact('item', 'hidePanelHeader'));
     }
 }
