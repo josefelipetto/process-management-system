@@ -1,71 +1,53 @@
 @extends('layouts.app')
 
-@section('styles')
-    <link href="{{ asset('css/flowchart.css') }}" rel="stylesheet">
+@section('scripts')
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            google.charts.load('current', {
+                packages: ["orgchart"]
+            });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Name');
+                data.addColumn('string', 'Manager');
+                data.addColumn('string', 'ToolTip');
+
+                // For each orgchart box, provide the name, manager, and tooltip to show.
+                data.addRows([
+                    [{
+                        v: 'Mike',
+                        f: 'Mike<div style="color:red; font-style:italic">President</div>'
+                    },
+                        '', 'The President'
+                    ],
+                    [{
+                        v: 'Jim',
+                        f: 'Jim<div style="color:red; font-style:italic">Vice President</div>'
+                    },
+                        'Mike', 'VP'
+                    ],
+                    ['Alice', 'Mike', ''],
+                    ['Bob', 'Jim', 'Bob Sponge'],
+                    ['Carol', 'Bob', '']
+                ]);
+
+                // Create the chart.
+                var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+                // Draw the chart, setting the allowHtml option to true for the tooltips.
+                chart.draw(data, {
+                    allowHtml: true
+                });
+            }
+        });
+    </script>
 @endsection
 
+
 @section('content')
-    <div class="row">
-        <div class="col">
-            
-            <!-- in a wrapping section include different containers for each step of the flow: data sources, build, deploy -->
-            <section class="container">
-
-                <!-- in the sources container show three cards, side by side, or one atop the other on smaller viewports -->
-                <div class="container__sources">
-
-                    <div class="sources--cms">
-                        <h3>CMSs</h3>
-                        <p>Contentful, Drupal, WordPress, etc.</p>
-                    </div>
-
-                    <div class="sources--markdown">
-                        <h3>Markdown</h3>
-                        <p>Documentation, Posts, etc.</p>
-                    </div>
-
-                    <div class="sources--data">
-                        <h3>Data</h3>
-                        <p>APIs, Databases, YAML, JSON, CSV, etc.</p>
-                    </div>
-
-                </div>
-
-                <!-- include a simple line to divide the container, and animate it to show a connection between the different containers  -->
-                <svg viewbox="0 0 10 100">
-                    <line x1="5" x2="5" y1="0" y2="100"/>
-                </svg>
-
-
-                <!-- in the build container show two cards, atop of one another and the first of one showing an SVG icon -->
-                <div class="container__build">
-
-                    <div class="build--powered">
-                        <svg viewbox="0 0 100 100">
-                            <circle cx="50" cy="50" r="50"/>
-                        </svg>
-                        <p>powered by</p>
-                        <h3>GraphQL</h3>
-                    </div>
-
-                    <div class="build--stack">
-                        HTML · CSS · React
-                    </div>
-
-                </div>
-
-                <!-- repeat the svg line to connect the second and third containers as well -->
-                <svg viewbox="0 0 10 100">
-                    <line x1="5" x2="5" y1="0" y2="100"/>
-                </svg>
-
-                <!-- in the deploy container show simply text, without a wrapping card -->
-                <div class="container__deploy">
-                    <h3>Static Web Host</h3>
-                    <p>Amazon S3, Netlify, GitHub Pages, Surge.sh, Aerobatic, Now.sh, & many more.</p>
-                </div>
-
-            </section>
-        </div>
+    <div style="margin-top: 50px;">
+        <div id="chart_div"></div>
     </div>
 @endsection
