@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
          $this->call(ProjectsSeeder::class);
          $this->call(StatusesSeeder::class);
          $this->call(ItemsSeeder::class);
+         $this->call(StepsMapSeeder::class);
     }
 }
