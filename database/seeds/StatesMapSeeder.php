@@ -5,7 +5,6 @@ use Illuminate\Database\Seeder;
 
 class StatesMapSeeder extends Seeder
 {
-    // File, Text or Data
 
     private $statesMap = [
         [
@@ -166,6 +165,7 @@ class StatesMapSeeder extends Seeder
         ],
 
     ];
+
     /**
      * Run the database seeds.
      *
