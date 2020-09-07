@@ -40,4 +40,20 @@ class Step extends Model
             return !$previousSteps->previousStep->status;
         })->count() > 0;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function stepInformation()
+    {
+        return $this->belongsTo(StepsMap::class, 'step_map_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function states(): HasMany
+    {
+        return $this->hasMany(State::class, 'step_id');
+    }
 }
