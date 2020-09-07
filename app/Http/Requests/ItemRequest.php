@@ -27,7 +27,9 @@ class ItemRequest extends FormRequest
             'code' => 'required',
             'description' => 'required|string',
             'status_id' => 'required|exists:statuses,id',
-            'project_id' => 'required|exists:projects,id'
+            'project_id' => 'required|exists:projects,id',
+            'nature_id' => 'required|exists:natures,id',
+            'type_id' => 'required|exists:types,id'
         ];
     }
 }

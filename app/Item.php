@@ -19,7 +19,9 @@ class Item extends Model
         'code',
         'description',
         'status_id',
-        'project_id'
+        'project_id',
+        'nature_id',
+        'type_id'
     ];
 
     /**

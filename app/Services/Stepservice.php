@@ -9,6 +9,7 @@ use App\Repositories\StepRepository;
 use App\State;
 use App\Step;
 use App\StepsMap;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -37,7 +38,7 @@ class Stepservice implements ServiceInterface
     }
 
     /**
-     * @return \App\Step[]|\Illuminate\Database\Eloquent\Collection
+     * @return Step[]|Collection
      */
     public function all()
     {
@@ -55,7 +56,7 @@ class Stepservice implements ServiceInterface
         foreach ($step->stepInformation->mappedStates as $mappedState) {
             State::create([
                 'step_id' => $step->id,
-                'state_map_id' => $mappedState->state->id
+                'state_map_id' => $mappedState->state_id
             ]);
         }
         return $step;
