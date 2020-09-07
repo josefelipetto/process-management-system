@@ -14,8 +14,13 @@ class StepStatesMap extends Model
         'type'
     ];
 
-    public function state()
+    public function stateInformation()
     {
         return $this->belongsTo(StatesMap::class, 'state_id');
+    }
+
+    public function stepInformation()
+    {
+        return $this->belongsTo(Step::class, 'step_id');
     }
 }

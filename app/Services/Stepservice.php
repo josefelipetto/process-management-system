@@ -1,9 +1,8 @@
 <?php
 
-
 namespace App\Services;
 
-
+use App\File;
 use App\Item;
 use App\PreviousSteps;
 use App\Repositories\StepRepository;
@@ -11,6 +10,10 @@ use App\State;
 use App\Step;
 use App\StepsMap;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Stepservice
@@ -59,14 +62,30 @@ class Stepservice implements ServiceInterface
     }
 
     /**
-     * @param Model $resource
-     * @param array $data
+     * @param Step $resource
+     * @param Request $data
      * @return bool
      */
-    public function update(Model $resource, array $data)
+    public function update(Model $resource, $data)
     {
-        return $this->stepRepository->update($resource, $data);
+
+        if ($data->files->count() > 0) {
+            /* @var UploadedFile $file */
+            foreach ($data->files as $state => $file) {
+                $path = Str::random(7) . '_' . $file->getClientOriginalName();
+                $file->move(storage_path('app/public'), $path);
+                File::create([
+                    'state_id' => $state,
+                    'path' => $path
+                ]);
+            }
+        }
+
+        return true;
+//        return $this->stepRepository->update($resource, $data);
     }
+
+
 
     /**
      * @param Model $model

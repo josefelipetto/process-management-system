@@ -2,11 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Stepservice;
 use App\Step;
 use Illuminate\Http\Request;
 
 class StepsController extends Controller
 {
+    private Stepservice $stepService;
+
+    /**
+     * StepsController constructor.
+     * @param Stepservice $stepService
+     */
+    public function __construct(Stepservice $stepService)
+    {
+        $this->stepService = $stepService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -65,12 +78,14 @@ class StepsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Step  $step
+     * @return bool
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Step $step)
     {
-        //
+        $this->stepService->update($step, $request);
+
+        return redirect()->back()->with('success', 'Etapa atualizada com sucesso');
     }
 
     /**

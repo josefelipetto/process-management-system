@@ -74,7 +74,7 @@ class ItemsService implements ServiceInterface
      * @param array $data
      * @return mixed
      */
-    public function update(Model $resource, array $data)
+    public function update(Model $resource, $data)
     {
         return $this->itemsRepository->update($resource, $data);
     }
