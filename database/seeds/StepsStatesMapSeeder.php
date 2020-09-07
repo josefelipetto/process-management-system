@@ -2,6 +2,7 @@
 
 use App\StatesMap;
 use App\StepsMap;
+use App\StepStatesMap;
 use Illuminate\Database\Seeder;
 
 /**
@@ -376,6 +377,14 @@ class StepsStatesMapSeeder extends Seeder
      */
     public function run()
     {
-        //
+        foreach ($this->map as $stepId => $states) {
+            foreach ($states as $state) {
+                StepStatesMap::create([
+                    'step_id' => $stepId,
+                    'state_id' => $state['state_id'],
+                    'type' => $state['type']
+                ]);
+            }
+        }
     }
 }
