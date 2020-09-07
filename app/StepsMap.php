@@ -3,7 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Class StepsMap
+ * @package App
+ */
 class StepsMap extends Model
 {
     public const ACOES_DE_VALIDACAO = 19;
@@ -30,9 +35,20 @@ class StepsMap extends Model
     public const SOLICITACAO_DO_LOTE_3 = 16;
 
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name',
         'ui_id',
         'type'
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function mappedStates(): HasMany
+    {
+        return $this->hasMany(StepStatesMap::class, 'step_id');
+    }
 }

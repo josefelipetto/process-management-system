@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Item;
 use App\PreviousSteps;
 use App\Repositories\StepRepository;
+use App\State;
+use App\Step;
 use App\StepsMap;
 use Illuminate\Database\Eloquent\Model;
 
@@ -41,11 +43,19 @@ class Stepservice implements ServiceInterface
 
     /**
      * @param array $data
-     * @return mixed
+     * @return Step
      */
-    public function create(array $data)
+    public function create(array $data): Step
     {
-        return $this->stepRepository->create($data);
+        $step = $this->stepRepository->create($data);
+
+        foreach ($step->stepInformation->mappedStates as $mappedState) {
+            State::create([
+                'step_id' => $step->id,
+                'state_map_id' => $mappedState->state->id
+            ]);
+        }
+        return $step;
     }
 
     /**
