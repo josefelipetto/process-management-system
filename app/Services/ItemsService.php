@@ -59,7 +59,7 @@ class ItemsService implements ServiceInterface
             $this->stepService->create([
                 'item_id' => $item->id,
                 'step_map_id' => $stepMap->id,
-                'status' => false
+                'status' => Step::UNCHECKED
             ]);
         }
 

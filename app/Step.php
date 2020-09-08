@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -21,6 +22,11 @@ class Step extends Model
         'status'
     ];
 
+    public const UNCHECKED = 0;
+    public const APPROVED = 1;
+    public const DENIED = 2;
+
+
     /**
      * @return HasMany
      */
@@ -36,15 +42,24 @@ class Step extends Model
     {
         $previousSteps = $this->previous()->get();
 
+        if (
+            $this->stepInformation->id === StepsMap::ATUALIZACOES_E_CORRECOES_ECR
+            || $this->stepInformation->id === StepsMap::ATUALIZACOES_E_CORRECOES_EDR
+            || $this->stepInformation->id === StepsMap::ATUALIZACOES_E_CORRECOES_QER
+        ) {
+            $previousStep = $previousSteps->first()->previousStep;
+            return $previousStep->status < 2;
+        }
+
         return $previousSteps->filter(static function (PreviousSteps $previousSteps) {
             return !$previousSteps->previousStep->status;
         })->count() > 0;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function stepInformation()
+    public function stepInformation(): BelongsTo
     {
         return $this->belongsTo(StepsMap::class, 'step_map_id');
     }
@@ -55,5 +70,13 @@ class Step extends Model
     public function states(): HasMany
     {
         return $this->hasMany(State::class, 'step_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'step_id');
     }
 }

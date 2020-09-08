@@ -198,4 +198,33 @@
             </div>
         </div>
     </form>
+    <div class="rol">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Atividades</h2>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <div class="col-sm-10 checkbox-radios">
+
+                        </div>
+                        @foreach($step->activities as $activity)
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="activity_{{ $activity->id }}"
+                                           name="activity_{{ $activity->id }}">
+                                    <span class="form-check-sign"></span>
+                                    {{ $activity->description }}
+                                </label>
+                            </div>
+
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

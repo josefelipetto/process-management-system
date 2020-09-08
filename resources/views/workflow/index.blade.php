@@ -664,6 +664,7 @@
 
 @section('scripts')
 <script type="text/javascript">
+
     var steps = [
         @foreach($item->steps as $step)
         {
@@ -675,6 +676,7 @@
                 type: "{{ $step->stepInformation->type }}"
             },
             isApproved: {{ $step->status ? "true" : "false" }},
+            isLocked: {{ $step->isLocked() ? "true" : "false" }},
             route: "{{ route('steps.edit', [ 'step' => $step->id ]) }}"
         },
         @endforeach
@@ -688,10 +690,20 @@
             svgElement.attr('stroke', '#82b366')
           }
 
-          $("#" + step.information.ui_id + '_link').attr('href', step.route);
+          let linkSelector = $("#" + step.information.ui_id + '_link');
+
+          linkSelector.attr('href', step.route);
+          linkSelector.click(function (event) {
+              let stepUiId = this.id.replace('_link', '')
+              let step = steps.filter(step => step.information.ui_id === stepUiId)[0];
+
+              if (step.isLocked) {
+                  alert('Esta etapa não pode ser editada enquanto as etapas anteriores não forem finalizadas.');
+                  event.preventDefault();
+              }
+          })
        });
     });
 
-    console.log(steps);
 </script>
 @endsection

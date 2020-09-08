@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Activity;
 use App\File;
 use App\Item;
 use App\PreviousSteps;
@@ -52,6 +53,17 @@ class Stepservice implements ServiceInterface
     public function create(array $data): Step
     {
         $step = $this->stepRepository->create($data);
+
+        if (array_key_exists($step->stepInformation->id, Activity::$stepActivitiesMap)) {
+            foreach (Activity::$stepActivitiesMap[$step->stepInformation->id] as $activity) {
+                Activity::create([
+                    'description' => $activity,
+                    'checked' => false,
+                    'step_id' => $step->id
+                ]);
+            }
+        }
+
 
         foreach ($step->stepInformation->mappedStates as $mappedState) {
             State::create([
@@ -135,6 +147,7 @@ class Stepservice implements ServiceInterface
                     ]);
                     break;
                 case StepsMap::PLANO_DE_CONTROLE_DE_QUALIDADE:
+                case StepsMap::ATUALIZACOES_E_CORRECOES_ECR:
                 case StepsMap::DESENVOLVIMENTO_DA_FERRAMENTA:
                     PreviousSteps::create([
                         'step_id' => $step->id,
@@ -168,6 +181,7 @@ class Stepservice implements ServiceInterface
                         'previous_step_id' => $item->step(StepsMap::ACOES_DE_VERIFICACAO)->id
                     ]);
                     break;
+                case StepsMap::ATUALIZACOES_E_CORRECOES_EDR:
                 case StepsMap::QUALIFICACAO_DO_FORNECEDOR:
                     PreviousSteps::create([
                         'step_id' => $step->id,
@@ -207,6 +221,7 @@ class Stepservice implements ServiceInterface
                         'previous_step_id' => $item->step(StepsMap::ACOES_DE_VALIDACAO)->id
                     ]);
                     break;
+                case StepsMap::ATUALIZACOES_E_CORRECOES_QER:
                 case StepsMap::ITEM_LIBERADO_PARA_PRODUCAO:
                     PreviousSteps::create([
                         'step_id' => $step->id,
