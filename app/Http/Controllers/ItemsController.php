@@ -94,7 +94,7 @@ class ItemsController extends Controller
     public function store(ItemRequest $request)
     {
         $this->itemsService->create($request->validated());
-        return redirect()->back()->with('success', 'Item criado com sucesso');
+        return redirect()->to('items')->with('success', 'Item criado com sucesso');
     }
 
     /**

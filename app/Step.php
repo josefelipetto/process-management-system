@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Step
@@ -12,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Step extends Model
 {
+
+    use SoftDeletes;
+    
     /**
      * @var string[]
      */
@@ -22,8 +26,17 @@ class Step extends Model
         'status'
     ];
 
+    /**
+     *
+     */
     public const UNCHECKED = 0;
+    /**
+     *
+     */
     public const APPROVED = 1;
+    /**
+     *
+     */
     public const DENIED = 2;
 
 
@@ -48,11 +61,12 @@ class Step extends Model
             || $this->stepInformation->id === StepsMap::ATUALIZACOES_E_CORRECOES_QER
         ) {
             $previousStep = $previousSteps->first()->previousStep;
-            return $previousStep->status < 2;
+            return $previousStep->status < self::DENIED;
         }
 
         return $previousSteps->filter(static function (PreviousSteps $previousSteps) {
-            return !$previousSteps->previousStep->status;
+            return $previousSteps->previousStep->status === self::UNCHECKED
+                || $previousSteps->previousStep->status === self::DENIED;
         })->count() > 0;
     }
 
@@ -78,5 +92,13 @@ class Step extends Model
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'step_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'item_id');
     }
 }

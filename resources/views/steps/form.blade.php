@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col">
                 <button type="submit" class="btn btn-fill btn-primary">Atualizar</button>
-                <button type="button" class="btn btn-info">
+                <button type="button" class="btn btn-info" onclick="backToWorkflow()">
                     Voltar
                 </button>
             </div>
@@ -57,7 +57,10 @@
                                             class="form-control-file"
                                             id="input-{{ $state->id }}"
                                             name="{{ $state->id }}"
-                                            required="{{ $state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory ? "true" : "false" }}"
+                                            @if ($state->files->count() > 0)
+                                            @elseif ($state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory)
+                                            required="true"
+                                            @endif
                                         />
                                     </div>
                                     <table class="table">
@@ -108,7 +111,7 @@
                                             id="input-{{ $state->id }}"
                                             name="{{ $state->id }}"
                                             value="{{ $state->value }}"
-                                            required="{{ $state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory ? "true" : "false" }}"
+                                            required="{{$state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory ? "true" : "false"}}"
                                         >
                                     </div>
                                 @endif
@@ -127,7 +130,7 @@
                             @if ($state->stateStepInformation($step->step_map_id)->first()->type === \App\StatesMap::OUTPUT)
                                 @if ($state->stateStepInformation($step->step_map_id)->first()->stateInformation->type === \App\StatesMap::FILE)
                                     <div class="form-group">
-                                        <label for="input-{{ $state->id }}">
+                                        <label for="output-{{ $state->id }}">
                                             {{ $state->stateStepInformation($step->step_map_id)->first()->stateInformation->name }}
                                             {{ $state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory ? "(*)" : "" }}
                                         </label>
@@ -136,7 +139,10 @@
                                             class="form-control-file"
                                             id="input-{{ $state->id }}"
                                             name="{{ $state->id }}"
-                                            required="{{ $state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory ? "true" : "false" }}"
+                                            @if ($state->files->count() > 0)
+                                            @elseif ($state->stateStepInformation($step->step_map_id)->first()->stateInformation->is_mandatory)
+                                            required="true"
+                                            @endif
                                         />
                                     </div>
                                     <table class="table">
@@ -197,34 +203,119 @@
                 </div>
             </div>
         </div>
-    </form>
-    <div class="rol">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Atividades</h2>
-                </div>
-                <div class="card-body">
-                    <ul>
+        <div class="rol">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Atividades</h2>
+                    </div>
+                    <div class="card-body">
                         <div class="col-sm-10 checkbox-radios">
-
-                        </div>
                         @foreach($step->activities as $activity)
                             <div class="form-check">
                                 <label class="form-check-label">
                                     <input class="form-check-input"
                                            type="checkbox"
                                            id="activity_{{ $activity->id }}"
-                                           name="activity_{{ $activity->id }}">
+                                           name="activity_{{ $activity->id }}"
+                                           @if ($activity->checked)
+                                               checked
+                                           @endif
+                                    >
                                     <span class="form-check-sign"></span>
-                                    {{ $activity->description }}
+                                    <h6>{{ $activity->description }}</h6>
                                 </label>
                             </div>
-
                         @endforeach
-                    </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2> Aprovação da fase</h2>
+                    </div>
+                    <div class="card-body">
+                        <label class="col-sm-2 col-form-label">Nome do Aprovador</label>
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="text"
+                                       class="form-control"
+                                       name="approver"
+                                       value="{{ old('approver') ?? $step->approver ?? ''}}"
+                                       placeholder="Nome do aprovador"
+                                       required
+                                >
+
+                                <br />
+                                <div class="form-check form-check-radio">
+                                    <label class="form-check-label">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="status"
+                                            id="statusRadio"
+                                            value="{{ \App\Step::UNCHECKED }}"
+                                            @if ($step->status === \App\Step::UNCHECKED)
+                                            checked
+                                            @endif
+                                        >
+                                        <span class="form-check-sign"></span>
+                                        Pendente
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-radio">
+                                    <label class="form-check-label">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="status"
+                                            id="statusRadio"
+                                            value="{{ \App\Step::DENIED }}"
+                                            @if ($step->status === \App\Step::DENIED)
+                                            checked
+                                            @endif
+                                        >
+                                        <span class="form-check-sign"></span>
+                                        Reprovado
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-radio">
+                                    <label class="form-check-label">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="status"
+                                            id="statusRadio"
+                                            value="{{ \App\Step::APPROVED }}"
+                                            @if ($step->status === \App\Step::APPROVED)
+                                            checked
+                                            @endif
+                                        >
+                                        <span class="form-check-sign"></span>
+                                        Aprovado
+                                    </label>
+                                </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    </form>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+        $('#status').click(function() {
+            console.log($('#status').not(this));
+            $('#status').not(this).prop('checked', false);
+        });
+
+        function backToWorkflow()
+        {
+            window.location.href = "{{ route('items.workflow', ['item' => $step->item->id]) }}";
+        }
+    </script>
 @endsection

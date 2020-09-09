@@ -105,7 +105,7 @@
                 </a>
                 <path d="M 73 366 L 73 479.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
                 <path d="M 73 484.88 L 69.5 477.88 L 73 479.63 L 76.5 477.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
-                <rect x="18" y="316" width="110" height="50" rx="7.5" ry="7.5" fill="#f5f5f5" stroke="#666666" pointer-events="all" />
+                <rect x="18" y="316" width="110" height="50" rx="7.5" ry="7.5" fill="#f5f5f5" stroke="#666666" pointer-events="all" id="solicitacao_do_lote_1" />
                 <a href="" id="solicitacao_do_lote_1_link">
                     <g transform="translate(-0.5 -0.5)">
                         <switch>
@@ -675,20 +675,26 @@
                 ui_id: "{{ $step->stepInformation->ui_id }}",
                 type: "{{ $step->stepInformation->type }}"
             },
-            isApproved: {{ $step->status ? "true" : "false" }},
+            isApproved: {{ $step->status === \App\Step::APPROVED ? "true" : "false" }},
+            isDenied: {{ $step->status === \App\Step::DENIED ? "true" : "false" }},
             isLocked: {{ $step->isLocked() ? "true" : "false" }},
             route: "{{ route('steps.edit', [ 'step' => $step->id ]) }}"
         },
         @endforeach
     ]
+    console.log(steps);
 
     $(document).ready(function () {
        steps.forEach(step => {
-          if (step.isApproved) {
-            let svgElement = $("#" + step.information.ui_id);
-            svgElement.attr('fill', '#d5e8d4');
-            svgElement.attr('stroke', '#82b366')
-          }
+           let svgElement = $("#" + step.information.ui_id);
+
+           if (step.isApproved || (step.information.ui_id === 'item_liberado_para_producao' && steps[19].isApproved)) {
+              svgElement.attr('fill', '#d5e8d4');
+              svgElement.attr('stroke', '#82b366')
+           } else if (step.isDenied) {
+              svgElement.attr('fill', '#f8cecc');
+              svgElement.attr('stroke', '#b85450')
+           }
 
           let linkSelector = $("#" + step.information.ui_id + '_link');
 

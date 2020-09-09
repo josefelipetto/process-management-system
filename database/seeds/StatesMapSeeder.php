@@ -34,7 +34,7 @@ class StatesMapSeeder extends Seeder
         [
             'name' => 'Outros Arquivos',
             'type' => StatesMap::FILE,
-            'is_mandatory' => true,
+            'is_mandatory' => false,
             'should_propagate' => false
         ],
         [
@@ -106,7 +106,7 @@ class StatesMapSeeder extends Seeder
         [
             'name' => 'Documentos Adicionais',
             'type' => StatesMap::FILE,
-            'should_propagate' => true,
+            'should_propagate' => false,
             'is_mandatory' => false,
         ],
         [

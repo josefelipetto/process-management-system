@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\MessageBag;
 use Illuminate\View\View;
 
 class StepsController extends Controller
@@ -45,8 +46,14 @@ class StepsController extends Controller
      */
     public function update(Request $request, Step $step)
     {
-        $this->stepService->update($step, $request);
+        $updated = $this->stepService->update($step, $request);
 
-        return redirect()->back()->with('success', 'Etapa atualizada com sucesso');
+        $redirect = redirect()->route('items.workflow', ['item' => $step->item->id]);
+
+        return $updated
+            ? $redirect->with('success', 'Etapa atualizada com sucesso')
+            : $redirect->with('errors', new MessageBag([
+                'Não é permitido editar o item se as etapas anteriores não forem cumpridas'
+            ]));
     }
 }

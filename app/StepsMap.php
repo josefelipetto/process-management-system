@@ -41,7 +41,8 @@ class StepsMap extends Model
     protected $fillable = [
         'name',
         'ui_id',
-        'type'
+        'type',
+        'phase'
     ];
 
     /**

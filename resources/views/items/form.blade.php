@@ -130,7 +130,7 @@
                             <div class="col-sm-10">
                                 <div class="form-group">
                                     <select class="select" name="type_id" required>
-                                        <option value="">Selecione um projeto...</option>
+                                        <option value="">Selecione um tipo...</option>
                                         @foreach(\App\Type::all() as $type)
                                             <option value="{{ $type->id }}">{{ $type->name }}</option>
                                         @endforeach

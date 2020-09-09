@@ -8,6 +8,7 @@ use App\Item;
 use App\PreviousSteps;
 use App\Repositories\StepRepository;
 use App\State;
+use App\StatesMap;
 use App\Step;
 use App\StepsMap;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\FileBag;
 
 /**
  * Class Stepservice
@@ -79,30 +81,152 @@ class Stepservice implements ServiceInterface
      * @param Request $data
      * @return bool
      */
-    public function update(Model $resource, $data)
+    public function update(Model $resource, $data): bool
     {
+        if ($resource->isLocked()) {
+            return false;
+        }
 
+        // handle files
         if ($data->files->count() > 0) {
-            /* @var UploadedFile $file */
-            foreach ($data->files as $state => $file) {
-                $path = Str::random(7) . '_' . $file->getClientOriginalName();
-                $file->move(storage_path('app/public'), $path);
-                File::create([
-                    'state_id' => $state,
-                    'path' => $path
-                ]);
+            $this->uploadFiles($data->files, $resource);
+        }
+
+        // handle other kinds of inputs
+        foreach ($data->all() as $state_id => $input) {
+            if (!is_numeric($state_id)) {
+                continue;
+            }
+
+            $state = State::find($state_id);
+
+            if ($state === null) {
+                continue;
+            }
+
+            $state->update([
+                'value' => $input
+            ]);
+
+            // now propagate
+            // @todo: Refactor to DRY with files propagation
+            // take item's steps.
+            $itemSteps = $resource->item->steps;
+
+            /* @var Step $itemStep */
+            foreach ($itemSteps as $itemStep) {
+                if ($itemStep->id === $resource->id) {
+                    continue;
+                }
+
+                $stateToUpdate = $itemStep->states()->where('state_map_id', $state->state_map_id)->first();
+
+                if (
+                    $stateToUpdate !== null
+                    && $stateToUpdate->stateInformation->should_propagate
+                    && $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first()->type
+                        === StatesMap::INPUT
+                ) {
+                    $stateToUpdate->update([
+                        'value' => $input
+                    ]);
+                }
             }
         }
 
+        $this->handleActivities($data->all());
+
+        if ($data->has('status')) {
+            $isADecisionPoint = $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_QER
+                || $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_ECR
+                || $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_EDR;
+
+            if ($isADecisionPoint && (int)$data->get('status') === Step::DENIED) {
+                /* @var Collection $steps */
+                $steps = $resource->item->steps;
+
+                $steps->filter(static function (Step $step) use ($resource) {
+                    return $step->stepInformation->phase === $resource->stepInformation->phase;
+                })->each(static function (Step $step) {
+                    $step->update([
+                        'status' => Step::DENIED
+                    ]);
+                });
+            }
+
+            return $this->stepRepository->update($resource, [
+                'status' => $data->get('status'),
+                'approver' => $data->get('approver')
+            ]);
+        }
+
         return true;
-//        return $this->stepRepository->update($resource, $data);
     }
 
+    /**
+     * @param FileBag $files
+     * @param Step $step
+     */
+    private function uploadFiles(FileBag $files, Step $step): void
+    {
+        /* @var UploadedFile $file */
+        foreach ($files as $stateKey => $file) {
+            $state = State::find($stateKey);
 
+            $path = File::all()->count() . '_' . $file->getClientOriginalName();
+            //$file->move(storage_path('app/public'), $path);
+            Storage::disk('public')->put($path, file_get_contents($file->getRealPath()));
+
+            File::create([
+                'state_id' => $state->id,
+                'path' => $path
+            ]);
+
+            // take item's steps.
+            $itemSteps = $step->item->steps;
+
+            /* @var Step $itemStep */
+            foreach ($itemSteps as $itemStep) {
+                if ($itemStep->id === $step->id) {
+                    continue;
+                }
+
+                $stateToUpdate = $itemStep->states()->where('state_map_id', $state->state_map_id)->first();
+
+                if (
+                    $stateToUpdate !== null
+                    && $stateToUpdate->stateInformation->should_propagate
+                    && $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first()->type
+                        === StatesMap::INPUT
+                ) {
+                    File::create([
+                        'state_id' => $stateToUpdate->id,
+                        'path' => $path
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $data
+     */
+    private function handleActivities(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            if ($value === 'on' && stripos($key, 'activity_') !== false) {
+                $activityId = explode('_', $key);
+                Activity::find($activityId[1])->update([
+                    'checked' => true
+                ]);
+            }
+        }
+    }
 
     /**
      * @param Model $model
      * @return bool|null
+     * @throws \Exception
      */
     public function delete(Model $model)
     {
@@ -128,6 +252,10 @@ class Stepservice implements ServiceInterface
                     PreviousSteps::create([
                         'step_id' => $step->id,
                         'previous_step_id' => $item->step(StepsMap::PLANO_DE_CONTROLE_DE_PROTOTIPO)->id
+                    ]);
+                    PreviousSteps::create([
+                        'step_id' => $step->id,
+                        'previous_step_id' => $item->step(StepsMap::ANALISE_DO_FORNECEDOR)->id
                     ]);
                     break;
                 case StepsMap::LOTE_1:
