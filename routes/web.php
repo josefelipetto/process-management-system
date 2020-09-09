@@ -19,6 +19,8 @@ Route::get('/', static function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'ProjectsController@index')->name('home');
 Route::resource('projects', 'ProjectsController');
 Route::resource('items', 'ItemsController');
+Route::get('items/{item}/workflow', 'ItemsController@viewWorkflow')->name('items.workflow');
+Route::resource('steps', 'StepsController');

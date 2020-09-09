@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Item
@@ -11,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Item extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */
@@ -18,7 +22,9 @@ class Item extends Model
         'code',
         'description',
         'status_id',
-        'project_id'
+        'project_id',
+        'nature_id',
+        'type_id'
     ];
 
     /**
@@ -35,5 +41,18 @@ class Item extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function steps(): HasMany
+    {
+        return $this->hasMany(Step::class);
+    }
+
+    public function step($step_map_id)
+    {
+        return $this->steps()->where('step_map_id', $step_map_id)->first();
     }
 }

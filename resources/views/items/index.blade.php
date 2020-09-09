@@ -55,7 +55,16 @@
                                     <td>{{ $item->project->name }}</td>
                                     <td>
                                         <div class="row">
-                                            <button class="btn btn-warning" onclick="redirectTo('{{ route('items.edit', ['item' => $item->id]) }}')">
+                                            <a
+                                                class="btn btn-info"
+                                                href="{{ route('items.workflow', ['item' => $item->id]) }}">
+                                                <span class="btn-label">
+                                                    <i class="now-ui-icons business_chart-bar-32"></i>
+                                                </span>
+                                            </a>
+                                            <button
+                                                class="btn btn-warning"
+                                                onclick="redirectTo('{{ route('items.edit', ['item' => $item->id]) }}')">
                                                 <span class="btn-label">
                                                     <i class="now-ui-icons design-2_ruler-pencil"></i>
                                                 </span>

@@ -25,7 +25,7 @@ class ProjetcsService implements ServiceInterface
         return $this->projectsRepository->create($data);
     }
 
-    public function update(Model $resource, array $data)
+    public function update(Model $resource, $data)
     {
         $this->projectsRepository->update($resource, $data);
     }

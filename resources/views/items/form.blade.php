@@ -112,6 +112,34 @@
                         </div>
 
                         <div class="row">
+                            <label class="col-sm-2 col-form-label">Natureza</label>
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <select class="select" name="nature_id" required>
+                                        <option value="">Selecione uma natureza...</option>
+                                        @foreach(\App\Nature::all() as $nature)
+                                        <option value="{{ $nature->id }}">{{ $nature->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 col-form-label">Tipo</label>
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <select class="select" name="type_id" required>
+                                        <option value="">Selecione um tipo...</option>
+                                        @foreach(\App\Type::all() as $type)
+                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-sm-2 col-form-label"></div>
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-fill btn-primary">Submit</button>

@@ -2,7 +2,12 @@
 
 namespace App\Services;
 
+use App\Item;
+use App\PreviousSteps;
 use App\Repositories\ItemsRepository;
+use App\Step;
+use App\StepsMap;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,14 +22,20 @@ class ItemsService implements ServiceInterface
     private ItemsRepository $itemsRepository;
 
     /**
+     * @var Stepservice
+     */
+    private Stepservice $stepService;
+
+    /**
      * ItemsService constructor.
      * @param ItemsRepository $itemsRepository
+     * @param Stepservice $stepService
      */
-    public function __construct(ItemsRepository $itemsRepository)
+    public function __construct(ItemsRepository $itemsRepository, Stepservice $stepService)
     {
         $this->itemsRepository = $itemsRepository;
+        $this->stepService = $stepService;
     }
-
 
     /**
      *
@@ -34,19 +45,36 @@ class ItemsService implements ServiceInterface
         return $this->itemsRepository->all();
     }
 
+
     /**
      * @param array $data
+     * @return Item
      */
-    public function create(array $data)
+    public function create(array $data): Item
     {
-        return $this->itemsRepository->create($data);
+        /* @var Item $item */
+        $item = $this->itemsRepository->create($data);
+
+        foreach (StepsMap::all() as $stepMap) {
+            $this->stepService->create([
+                'item_id' => $item->id,
+                'step_map_id' => $stepMap->id,
+                'status' => Step::UNCHECKED
+            ]);
+        }
+
+        $this->stepService->setupWorkflow($item);
+
+        return $item;
     }
+
 
     /**
      * @param Model $resource
      * @param array $data
+     * @return mixed
      */
-    public function update(Model $resource, array $data)
+    public function update(Model $resource, $data)
     {
         return $this->itemsRepository->update($resource, $data);
     }
@@ -54,9 +82,9 @@ class ItemsService implements ServiceInterface
     /**
      * @param Model $model
      * @return bool|null
-     * @throws \Exception
+     * @throws Exception
      */
-    public function delete(Model $model)
+    public function delete(Model $model): ?bool
     {
         return $this->itemsRepository->delete($model);
     }

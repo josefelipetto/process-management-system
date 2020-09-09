@@ -21,6 +21,32 @@ use Illuminate\View\View;
 class ItemsController extends Controller
 {
 
+    private $states = [
+        'especificacoes_preliminares',
+        "plano_de_controle_de_prototipo",
+        "analise_do_fornecedor",
+        "solicitacao_do_lote_1",
+        "lote_1",
+        'resultados_aceitaveis_ecr',
+        'atualizacoes_e_correcoes_ecr',
+        'plano_de_controle_de_qualidade',
+        'desenvolvimentp_da_ferramenta',
+        'solicitacao_do_lote_2',
+        'lote_2',
+        'acoes_de_verificacao',
+        'resultados_aceitaveis_edr',
+        'atualizacoes_e_correcoes_edr',
+        'qualificacao_do_fornecedor',
+        'solicitacao_do_lote_3',
+        'plano_de_controle_de_manufatura',
+        'lote_3',
+        'acoes_de_validacao',
+        'resultados_aceitaveis_qer',
+        'atualizacoes_e_correcoes_qer',
+        'item_liberado_para_producao'
+    ];
+
+
     /**
      * @var ItemsService
      */
@@ -68,7 +94,7 @@ class ItemsController extends Controller
     public function store(ItemRequest $request)
     {
         $this->itemsService->create($request->validated());
-        return redirect()->back()->with('success', 'Item criado com sucesso');
+        return redirect()->to('items')->with('success', 'Item criado com sucesso');
     }
 
     /**
@@ -115,10 +141,26 @@ class ItemsController extends Controller
      *
      * @param Item $item
      * @return RedirectResponse
+     * @throws \Exception
      */
     public function destroy(Item $item)
     {
         $this->itemsService->delete($item);
         return redirect()->back()->with('success', 'Item deletado com sucesso');
+    }
+
+    /**
+     * View Item's workflow
+     * @param Item $item
+     * @return Application|Factory|View
+     */
+    public function viewWorkflow(Item $item)
+    {
+        return view('workflow.index', compact('item'));
+    }
+
+    public function getSteps(Item $item)
+    {
+        return response()->json($item);
     }
 }

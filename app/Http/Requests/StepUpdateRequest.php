@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ItemRequest extends FormRequest
+class StepUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,7 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
-            'description' => 'required|string',
-            'status_id' => 'required|exists:statuses,id',
-            'project_id' => 'required|exists:projects,id',
-            'nature_id' => 'required|exists:natures,id',
-            'type_id' => 'required|exists:types,id'
+            //
         ];
     }
 }
