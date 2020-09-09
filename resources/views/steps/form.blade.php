@@ -54,7 +54,8 @@
 
                                         <input
                                             type="file"
-                                            class="form-control-file"
+                                            onchange="fillFilename(this)"
+                                            class="form-control-file ipt"
                                             id="input-{{ $state->id }}"
                                             name="{{ $state->id }}"
                                             @if ($state->files->count() > 0)
@@ -62,6 +63,8 @@
                                             required="true"
                                             @endif
                                         />
+
+                                        <span id="input-filename-{{ $state->id }}"></span>
                                     </div>
                                     <table class="table">
                                         <thead class="text-primary">
@@ -136,7 +139,8 @@
                                         </label>
                                         <input
                                             type="file"
-                                            class="form-control-file"
+                                            class="form-control-file opt"
+                                            onchange="fillFilename(this)"
                                             id="input-{{ $state->id }}"
                                             name="{{ $state->id }}"
                                             @if ($state->files->count() > 0)
@@ -144,6 +148,7 @@
                                             required="true"
                                             @endif
                                         />
+                                        <span id="output-filename-{{ $state->id }}"></span>
                                     </div>
                                     <table class="table">
                                         <thead class="text-primary">
@@ -316,6 +321,19 @@
         function backToWorkflow()
         {
             window.location.href = "{{ route('items.workflow', ['item' => $step->item->id]) }}";
+        }
+
+        function fillFilename(context) {
+            let filename = context.files[0].name;
+
+            if (context.className.search('ipt') !== -1) {
+                $("#input-filename-" + context.getAttribute('name')).html(filename);
+                return;
+            }
+
+            if (context.className.search('opt') !== -1) {
+                $("#output-filename-" + context.getAttribute('name')).html(filename);
+            }
         }
     </script>
 @endsection

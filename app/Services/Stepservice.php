@@ -253,10 +253,6 @@ class Stepservice implements ServiceInterface
                         'step_id' => $step->id,
                         'previous_step_id' => $item->step(StepsMap::PLANO_DE_CONTROLE_DE_PROTOTIPO)->id
                     ]);
-                    PreviousSteps::create([
-                        'step_id' => $step->id,
-                        'previous_step_id' => $item->step(StepsMap::ANALISE_DO_FORNECEDOR)->id
-                    ]);
                     break;
                 case StepsMap::LOTE_1:
                     PreviousSteps::create([

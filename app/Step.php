@@ -15,7 +15,7 @@ class Step extends Model
 {
 
     use SoftDeletes;
-    
+
     /**
      * @var string[]
      */
