@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -137,21 +136,10 @@ class Stepservice implements ServiceInterface
         $this->handleActivities($data->all());
 
         if ($data->has('status')) {
-            $isADecisionPoint = $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_QER
-                || $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_ECR
-                || $resource->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_EDR;
-
-            if ($isADecisionPoint && (int)$data->get('status') === Step::DENIED) {
+            if ($this->isADecisionPoint($resource) && (int)$data->get('status') === Step::DENIED) {
                 /* @var Collection $steps */
                 $steps = $resource->item->steps;
-
-                $steps->filter(static function (Step $step) use ($resource) {
-                    return $step->stepInformation->phase === $resource->stepInformation->phase;
-                })->each(static function (Step $step) {
-                    $step->update([
-                        'status' => Step::DENIED
-                    ]);
-                });
+                $this->deny($steps, $resource);
             }
 
             return $this->stepRepository->update($resource, [
@@ -161,6 +149,45 @@ class Stepservice implements ServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param Step $step
+     * @return bool
+     */
+    private function isADecisionPoint(Step $step): bool
+    {
+        return $step->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_QER
+        || $step->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_ECR
+        || $step->stepInformation->id === StepsMap::RESULTADOS_ACEITAVEIS_EDR;
+    }
+
+    /**
+     * @param Collection $steps
+     * @param Step $resource
+     */
+    private function deny(Collection $steps, Step $resource): void
+    {
+        $this->getPhaseSteps($steps, $resource)->each(static function (Step $step) {
+            $step->update([
+                'status' => Step::DENIED
+            ]);
+        });
+    }
+
+    /**
+     * @param Collection $steps
+     * @param Step $resource
+     * @return Collection
+     */
+    private function getPhaseSteps(Collection $steps, Step $resource): Collection
+    {
+        return $steps->filter(static function (Step $step) use ($resource) {
+            $isVendorQualification = $step->stepInformation->phase === 'QER' &&
+                $step->stepInformation->id === StepsMap::QUALIFICACAO_DO_FORNECEDOR;
+
+            return !$isVendorQualification && $step->stepInformation->phase === $resource->stepInformation->phase;
+        });
     }
 
     /**

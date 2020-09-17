@@ -44,6 +44,8 @@
                                 <th>Código</th>
                                 <th>Descrição</th>
                                 <th>Projeto</th>
+                                <th>Natureza</th>
+                                <th>Tipo</th>
                                 <th>Ações</th>
                             </tr>
                             </thead>
@@ -53,6 +55,8 @@
                                     <td>{{ $item->code }}</td>
                                     <td>{{ $item->description }}</td>
                                     <td>{{ $item->project->name }}</td>
+                                    <td>{{ $item->nature->name }}</td>
+                                    <td>{{ $item->type->name }}</td>
                                     <td>
                                         <div class="row">
                                             <a

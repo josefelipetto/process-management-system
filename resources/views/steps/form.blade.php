@@ -25,6 +25,13 @@
             @endif
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+            <h2> {{ $step->stepInformation->name }}</h2>
+        </div>
+    </div>
+
     <form method="post" action="{{ route('steps.update', ['step' => $step->id]) }}" enctype="multipart/form-data">
         @method('PUT')
         @csrf

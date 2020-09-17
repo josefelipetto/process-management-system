@@ -346,7 +346,7 @@ Copyright (c) 2015 Daniel Eden
 .navbar .navbar-nav>a.btn {
   border-width: 2px;
   font-weight: 400;
-  font-size: 0.8571em;
+  font-size: 1.3em;
   line-height: 1.35em;
   border: none;
   margin: 10px 1px;
@@ -1332,7 +1332,7 @@ fieldset[disabled] .btn-link.active {
   color: #2c2c2c;
   line-height: normal;
   height: auto;
-  font-size: 0.8571em;
+  font-size: 1.3em;
   -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
@@ -1800,7 +1800,7 @@ textarea.form-control:active {
 }
 
 .form-text {
-  font-size: 0.8571em;
+  font-size: 1.3em;
 }
 
 .form-control-lg {
@@ -2003,7 +2003,7 @@ a.text-gray:hover {
 
 .blockquote small {
   color: #888;
-  font-size: 0.8571em;
+  font-size: 1.3em;
   text-transform: uppercase;
 }
 
@@ -2036,7 +2036,7 @@ a.text-gray:hover {
 
 body {
   color: #2c2c2c;
-  font-size: 14px;
+  font-size: 15px;
   font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -2477,7 +2477,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 
 .navbar .navbar-brand {
   text-transform: uppercase;
-  font-size: 0.8571em;
+  font-size: 1.3em;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   line-height: 1.625rem;
@@ -2742,7 +2742,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 
 .dropdown-menu .dropdown-item,
 .bootstrap-select .dropdown-menu.inner li a {
-  font-size: 0.8571em;
+  font-size: 1.3em;
   padding-top: .6rem;
   padding-bottom: .6rem;
   margin-top: 5px;
@@ -4268,7 +4268,7 @@ Created using IcoMoon - icomoon.io
 .footer ul li a {
   color: inherit;
   padding: 0.5rem;
-  font-size: 0.8571em;
+  font-size: 1.3em;
   text-transform: uppercase;
   text-decoration: none;
 }
@@ -4283,7 +4283,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .footer .copyright {
-  font-size: 0.8571em;
+  font-size: 1.3em;
   line-height: 1.8;
 }
 
@@ -4686,7 +4686,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .card label {
-  font-size: 0.8571em;
+  font-size: 1.3em;
   margin-bottom: 5px;
   color: #9A9A9A;
 }

@@ -51,8 +51,28 @@ class Item extends Model
         return $this->hasMany(Step::class);
     }
 
+    /**
+     * @param $step_map_id
+     * @return Model|HasMany|object|null
+     */
     public function step($step_map_id)
     {
         return $this->steps()->where('step_map_id', $step_map_id)->first();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function nature()
+    {
+        return $this->belongsTo(Nature::class, 'nature_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
     }
 }

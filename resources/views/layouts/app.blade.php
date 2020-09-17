@@ -20,6 +20,7 @@
 
     </head>
     <body>
+
     <div class="wrapper">
 
         <div class="sidebar" data-color="orange">
@@ -32,7 +33,7 @@
                 </a>
 
                 <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                   {{ env('APP_NAME') }}
+                   Management Tool
                 </a>
             </div>
 
@@ -73,7 +74,7 @@
             <footer class="footer">
                 <div class=" container-fluid ">
                     <div class="copyright" id="copyright">
-                        &copy; <script>
+                        Bruno Mattos &copy; <script>
                             document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
                         </script>.
                     </div>
