@@ -123,14 +123,22 @@ class Step extends Model
     {
         switch ($phase) {
             case 'ECR':
-                return Step::where('step_map_id', StepsMap::RESULTADOS_ACEITAVEIS_ECR)->first();
+                $stepMapId = StepsMap::RESULTADOS_ACEITAVEIS_ECR;
+                break;
             case 'EDR':
-                return Step::where('step_map_id', StepsMap::RESULTADOS_ACEITAVEIS_EDR)->first();
+                $stepMapId = StepsMap::RESULTADOS_ACEITAVEIS_EDR;
+                break;
             case 'QER':
-                return Step::where('step_map_id', StepsMap::RESULTADOS_ACEITAVEIS_QER)->first();
+                $stepMapId = StepsMap::RESULTADOS_ACEITAVEIS_QER;
+                break;
             default:
                 return null;
         }
+
+        return self::where([
+            'step_map_id' => $stepMapId,
+            'item_id' => $this->getAttribute('item_id')
+        ])->first();
     }
 
     /**
@@ -141,13 +149,21 @@ class Step extends Model
     {
         switch ($phase) {
             case 'ECR':
-                return Step::where('step_map_id', StepsMap::ATUALIZACOES_E_CORRECOES_ECR)->first();
+                $stepMapId = StepsMap::ATUALIZACOES_E_CORRECOES_ECR;
+                break;
             case 'EDR':
-                return Step::where('step_map_id', StepsMap::ATUALIZACOES_E_CORRECOES_EDR)->first();
+                $stepMapId = StepsMap::ATUALIZACOES_E_CORRECOES_EDR;
+                break;
             case 'QER':
-                return Step::where('step_map_id', StepsMap::ATUALIZACOES_E_CORRECOES_QER)->first();
+                $stepMapId = StepsMap::ATUALIZACOES_E_CORRECOES_QER;
+                break;
             default:
                 return null;
         }
+
+        return self::where([
+            'step_map_id' => $stepMapId,
+            'item_id' => $this->getAttribute('item_id')
+        ])->first();
     }
 }

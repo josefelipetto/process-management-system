@@ -117,16 +117,26 @@ class Stepservice implements ServiceInterface
 
                 $stateToUpdate = $itemStep->states()->where('state_map_id', $state->state_map_id)->first();
 
-                if (
-                    $stateToUpdate !== null
-                    && $stateToUpdate->stateInformation->should_propagate
-                    && $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first()->type
-                        === StatesMap::INPUT
-                ) {
+                if ($stateToUpdate === null) {
+                    continue;
+                }
+
+                $stateToUpdateInformation = $stateToUpdate
+                    ->stateStepInformation($stateToUpdate->step->step_map_id)
+                    ->first();
+
+                if ($stateToUpdateInformation === null) {
+                    continue;
+                }
+
+                if ($stateToUpdate->stateInformation->should_propagate
+                    && $stateToUpdateInformation->type === StatesMap::INPUT) {
                     $stateToUpdate->update([
                         'value' => $input
                     ]);
                 }
+
+
             }
         }
 
@@ -221,14 +231,16 @@ class Stepservice implements ServiceInterface
                     continue;
                 }
 
-                $stateToUpdateInformation = $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first();
+                $stateToUpdateInformation = $stateToUpdate
+                    ->stateStepInformation($stateToUpdate->step->step_map_id)
+                    ->first();
 
                 if ($stateToUpdateInformation === null) {
                     continue;
                 }
 
-                if ($stateToUpdate->stateInformation->should_propagate
-                    && $stateToUpdateInformation->type === StatesMap::INPUT) {
+                if ($stateToUpdate->stateInformation->should_propagate &&
+                    $stateToUpdateInformation->type === StatesMap::INPUT) {
                     File::create([
                         'state_id' => $stateToUpdate->id,
                         'path' => $path
