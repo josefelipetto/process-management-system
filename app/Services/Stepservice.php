@@ -86,10 +86,7 @@ class Stepservice implements ServiceInterface
             return false;
         }
 
-        // handle files
-        if ($data->files->count() > 0) {
-            $this->uploadFiles($data->files, $resource);
-        }
+        $this->uploadFiles($data->files, $resource);
 
         // handle other kinds of inputs
         foreach ($data->all() as $state_id => $input) {
@@ -220,12 +217,18 @@ class Stepservice implements ServiceInterface
 
                 $stateToUpdate = $itemStep->states()->where('state_map_id', $state->state_map_id)->first();
 
-                if (
-                    $stateToUpdate !== null
-                    && $stateToUpdate->stateInformation->should_propagate
-                    && $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first()->type
-                        === StatesMap::INPUT
-                ) {
+                if ($stateToUpdate === null) {
+                    continue;
+                }
+
+                $stateToUpdateInformation = $stateToUpdate->stateStepInformation($stateToUpdate->step_id)->first();
+
+                if ($stateToUpdateInformation === null) {
+                    continue;
+                }
+
+                if ($stateToUpdate->stateInformation->should_propagate
+                    && $stateToUpdateInformation->type === StatesMap::INPUT) {
                     File::create([
                         'state_id' => $stateToUpdate->id,
                         'path' => $path

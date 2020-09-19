@@ -19,8 +19,8 @@ Route::get('/', static function () {
 
 Auth::routes();
 
-Route::get('/home', 'ProjectsController@index')->name('home');
-Route::resource('projects', 'ProjectsController');
-Route::resource('items', 'ItemsController');
-Route::get('items/{item}/workflow', 'ItemsController@viewWorkflow')->name('items.workflow');
-Route::resource('steps', 'StepsController');
+Route::get('/home', 'ProjectsController@index')->name('home')->middleware(['auth']);
+Route::resource('projects', 'ProjectsController')->middleware(['auth']);
+Route::resource('items', 'ItemsController')->middleware(['auth']);
+Route::get('items/{item}/workflow', 'ItemsController@viewWorkflow')->name('items.workflow')->middleware(['auth']);
+Route::resource('steps', 'StepsController')->middleware(['auth']);
