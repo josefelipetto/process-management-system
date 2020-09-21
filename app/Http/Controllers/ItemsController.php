@@ -156,7 +156,8 @@ class ItemsController extends Controller
      */
     public function viewWorkflow(Item $item)
     {
-        return view('workflow.index', compact('item'));
+        $hidePanelHeader = true;
+        return view('workflow.index', compact('item', 'hidePanelHeader'));
     }
 
     public function getSteps(Item $item)

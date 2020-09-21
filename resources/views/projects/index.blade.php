@@ -52,7 +52,7 @@
                                 <tr>
                                     <td>{{ $project->code }}</td>
                                     <td>{{ $project->name }}</td>
-                                    <td>{{ $project->user->name }}</td>
+                                    <td>{{ $project->responsible }}</td>
                                     <td>
                                         <div class="row">
                                             <button

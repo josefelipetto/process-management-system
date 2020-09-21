@@ -70,6 +70,21 @@
                         </div>
 
                         <div class="row">
+                            <label class="col-sm-2 col-form-label">Responsável</label>
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="responsible"
+                                           value="{{ old('responsible') ?? $project->responsible ?? ''}}"
+                                           placeholder="Digite o nome do responsável..."
+                                           required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-sm-2 col-form-label"></div>
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-fill btn-primary">Submit</button>

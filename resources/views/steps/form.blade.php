@@ -261,6 +261,12 @@
                                 >
 
                                 <br />
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Comentários</label>
+                                    <textarea class="form-control" id="comments" name="comments" rows="5" style="color: black;">{{ old('comments') ?? $step->comments ?? '' }}</textarea>
+                                </div>
+
                                 <div class="form-check form-check-radio">
                                     <label class="form-check-label">
                                         <input

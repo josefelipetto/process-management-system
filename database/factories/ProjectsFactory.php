@@ -14,5 +14,6 @@ $factory->define(Project::class, function (Faker $faker) {
         'name' => $faker->company,
         'code' => $code,
         'user_id' => 1,
+        'responsible' => $faker->name
     );
 });

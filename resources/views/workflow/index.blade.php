@@ -1,7 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row" style="margin-top: 12%; margin-left: 8%;">
+
+    <div style="display:flex; flex-direction: column; align-items:center; justify-content:center; margin-top: 5%;font-family: sans-serif;">
+        <h3 style="margin: 0"><strong>Código:</strong> {{ $item->code }} </h3>
+        <h5 style="margin: 1% 0 0 0"><strong>Descrição:</strong> {{ $item->description }} </h5>
+    </div>
+    <div class="row" style="margin-top: 5%;">
+        <div class="col" style="margin-left: 15%;font-family: sans-serif;font-size: 24px;font-weight: bold">
+            Criação de Design
+        </div>
+        <div class="col" style="margin-left: 4%;font-family: sans-serif;font-size: 24px;font-weight: bold">
+            Avaliação do Processo
+        </div>
+        <div class="col" style="margin-left: 4%;font-family: sans-serif; font-size: 24px;font-weight: bold">
+            Transição do Produto
+        </div>
+    </div>
+    <div class="row" style="margin-top: 2%; margin-left: 8%;">
         <div class="col">
             <svg
                 xmlns="http://www.w3.org/2000/svg"

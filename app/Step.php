@@ -23,7 +23,8 @@ class Step extends Model
         'item_id',
         'step_map_id',
         'approver',
-        'status'
+        'status',
+        'comments'
     ];
 
     /**

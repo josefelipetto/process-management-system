@@ -128,7 +128,7 @@ class StatesMapSeeder extends Seeder
             'is_mandatory' => true,
         ],
         [
-            'name' => 'Relatório dos Resultados de Verificação 2',
+            'name' => 'Relatório dos Resultados de Verificação',
             'type' => StatesMap::FILE,
             'should_propagate' => true,
             'is_mandatory' => true,

@@ -149,9 +149,15 @@ class Stepservice implements ServiceInterface
                 $this->deny($steps, $resource);
             }
 
-            return $this->stepRepository->update($resource, [
+            $this->stepRepository->update($resource, [
                 'status' => $data->get('status'),
                 'approver' => $data->get('approver')
+            ]);
+        }
+
+        if ($data->has('comments')) {
+            $this->stepRepository->update($resource, [
+                'comments' => $data->get('comments')
             ]);
         }
 
